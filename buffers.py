@@ -15,7 +15,7 @@ class VertexBuffer:
         # use the buffer
         glBindBuffer(GL_ARRAY_BUFFER, self.id)
         # allocate memory in the buffer and populate with data
-        glBufferData(GL_ARRAY_BUFFER, len(self.data_gl)*4, self.data_gl, GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, sizeof(self.data_gl), self.data_gl, GL_STATIC_DRAW)
         # tell opengl how data is packed in buffer
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0)
         # enable vertexattrib array at position 0 so shader can read it
@@ -31,9 +31,9 @@ class VertexBuffer:
 
 class IndexBuffer:
 
-    def __init__(self, data, size):
+    def __init__(self, data):
         self.id = GLuint(0)
-        self.data_gl = (GLfloat * len(data))(*data)
+        self.data_gl = (GLuint * len(data))(*data)
         self.__create_buffer()
 
     def __create_buffer(self):
@@ -42,7 +42,7 @@ class IndexBuffer:
         # use the buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.id)
         # allocate memory in the buffer and populate with data
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, len(self.data_gl)*4, self.data_gl, GL_STATIC_DRAW)
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(self.data_gl), self.data_gl, GL_STATIC_DRAW)
 
     def get_id(self):
         return self.id
