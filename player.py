@@ -24,18 +24,6 @@ class Player(GameObject):
             [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
-        # self.shape = [
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #     [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-        #     [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-        #     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        #     [1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
-        #     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        #     [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
-        #     [0, 1, 0, 1, 1, 1, 1, 0, 1, 0],
-        #     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        # ]
         self.blocks = []
         for row_index, row in enumerate(self.shape):
             myrow = []
@@ -50,10 +38,13 @@ class Player(GameObject):
                 block.render()
 
     def move_left(self):
-        self.matrix.translate(-10.0, 0, 0.0)
+        self.translate(-10.0, 0.0, 0.0)
+        #self.matrix.translate(-10.0, 0, 0.0)
 
     def move_right(self):
-        self.matrix.translate(10.0, 0, 0.0)
+        self.translate(10.0, 0.0, 0.0)
+        #self.matrix.translate(10.0, 0, 0.0)
+
 
     def fire(self):
         sound = pyglet.resource.media('shoot.wav', streaming=False)

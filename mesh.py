@@ -18,11 +18,9 @@ class Mesh(GameObject):
         self.normals = []
         self.indices = []
         self.uvs = []
-        self.camera = Camera()
+        # we should really be getting the camera not creating a new instance..
+        self.camera = Camera(800, 600)
         GameObject.__init__(self)
-
-    def rgb(self, color):
-        return 0.0, 0.0, 0.0
 
     def set_data(self, *args, **kwargs):
         self.vertices = kwargs.get('vertices', [])
@@ -38,42 +36,56 @@ class Mesh(GameObject):
         # create a vertexbuffer
         if self.vertices:
             self.vbuf = VertexBuffer(self.vertices)
-            self.vbuf.set_attribute(0, 2, GL_FLOAT, GL_FALSE, 0, 0)
+            #self.vbuf.set_attribute(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0)
+            #self.vbuf.set_attribute(1, 2, GL_FLOAT, GL_FALSE, 2, 0)
         # create an indexbuffer
         if self.indices:
             self.ibuf = IndexBuffer(self.indices)
-        # stop the vao
-        glBindVertexArray(0)
 
         self.program.compile_shader_from_string(
             """
             layout (location = 0) in vec2 position;
+            layout (location = 1) in vec3 color;
             uniform mat4 proj;
             uniform mat4 view;
             uniform mat4 model;
+            smooth out vec3 theColor;
 
             void main()
             {
+                theColor = color;
                 gl_Position = proj * view * model * vec4(position, 0.0, 1.0);
             }
             """, 'vertex')
 
         self.program.compile_shader_from_string(
             """
+            smooth in vec3 theColor;
             void main()
             {
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                gl_FragColor = vec4(theColor, 1.0);
             }
             """, 'fragment')
         self.program.link()
         self.program.validate()
         self.program.bind()
 
+        #self.vbuf.set_attribute(self.program.get_handle(), "position", 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0)
+        #self.vbuf.set_attribute(self.program.get_handle(), "color", 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0)
+
         # Specify the layout of the vertex data
         position_attribute = glGetAttribLocation(self.program.get_handle(), "position")
         if position_attribute > -1:
             glEnableVertexAttribArray(position_attribute)
-            glVertexAttribPointer(position_attribute, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0)
+            glVertexAttribPointer(position_attribute, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0)
+
+        color_attribute = glGetAttribLocation(self.program.get_handle(), "color")
+        if color_attribute > -1:
+            glEnableVertexAttribArray(color_attribute)
+            glVertexAttribPointer(color_attribute, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 2 * sizeof(GLfloat))
+
+        # stop the vao
+        glBindVertexArray(0)
 
     def render(self):
         GameObject.render(self)
@@ -96,6 +108,7 @@ class Mesh(GameObject):
 
         model_location = glGetUniformLocation(self.program.get_handle(), "model")
         if model_location > -1:
+            self.matrix = Matrix4.new_translate(self.position.x, self.position.y, self.position.z)
             if self.parent:
                 m = Matrix4().identity()
                 m = self.parent.matrix * self.matrix

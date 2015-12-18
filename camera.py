@@ -3,10 +3,10 @@ from euclid import *
 
 class Camera:
 
-    def __init__(self):
+    def __init__(self, w, h):
         self.projection = Matrix4().identity()
         self.view = Matrix4().identity()
-        self.ortho(0.0, 800.0, 600.0, 0.0, 10.0, -10.0)
+        self.ortho(0.0, w, h, 0.0, 10.0, -10.0)
         self.look_at(
             Vector3(0.0, 0.0, 1.0),
             Vector3(0.0, 0.0, 0.0),

@@ -11,7 +11,7 @@ class Enemy(GameObject):
         self.y = 0
         self.width = BLOCK_SIZE * 10
         self.height = BLOCK_SIZE * 10
-        self.color = 0xFFFFFF
+        self.color = 0x1EBDDD
         self.shape = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
