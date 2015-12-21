@@ -39,12 +39,9 @@ class Player(GameObject):
 
     def move_left(self):
         self.translate(-10.0, 0.0, 0.0)
-        #self.matrix.translate(-10.0, 0, 0.0)
 
     def move_right(self):
         self.translate(10.0, 0.0, 0.0)
-        #self.matrix.translate(10.0, 0, 0.0)
-
 
     def fire(self):
         sound = pyglet.resource.media('shoot.wav', streaming=False)

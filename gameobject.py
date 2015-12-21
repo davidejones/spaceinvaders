@@ -10,6 +10,9 @@ class GameObject:
     def render(self):
         pass
 
+    def update(self, dt):
+        pass
+
     def Translate(self, x, y, z):
         """ new translation """
         self.position.x = x
