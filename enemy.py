@@ -5,8 +5,9 @@ import pyglet
 
 class Enemy(GameObject):
 
-    def __init__(self):
+    def __init__(self, parent=None):
         GameObject.__init__(self)
+        self.parent = parent
         self.x = 0
         self.y = 0
         self.width = BLOCK_SIZE * 10
