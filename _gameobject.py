@@ -4,7 +4,7 @@ from program import Program
 from camera import Camera
 #from glm import *
 #from glm.functions import *
-from euclid import *
+from euclid3 import *
 import math
 import time
 
@@ -63,7 +63,8 @@ class GameObject:
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(self.elements_gl), self.elements_gl, GL_STATIC_DRAW)
 
         self.program.compile_shader_from_string(
-            """
+            b"""
+            #version 440
             layout (location = 0) in vec2 position;
             uniform mat4 proj;
             uniform mat4 view;
@@ -76,7 +77,8 @@ class GameObject:
             """, 'vertex')
 
         self.program.compile_shader_from_string(
-            """
+            b"""
+            #version 440
             void main()
             {
                 gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);

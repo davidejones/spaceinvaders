@@ -1,4 +1,4 @@
-from euclid import *
+from euclid3 import *
 
 
 class Camera:

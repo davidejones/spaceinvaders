@@ -4,7 +4,7 @@ from buffers import VertexBuffer, IndexBuffer
 from camera import Camera
 from pyglet.gl import *
 from ctypes import *
-from euclid import *
+from euclid3 import *
 
 
 class Mesh(GameObject):
@@ -43,7 +43,8 @@ class Mesh(GameObject):
             self.ibuf = IndexBuffer(self.indices)
 
         self.program.compile_shader_from_string(
-            """
+            b"""
+            #version 440
             layout (location = 0) in vec2 position;
             layout (location = 1) in vec3 color;
             uniform mat4 proj;
@@ -59,7 +60,8 @@ class Mesh(GameObject):
             """, 'vertex')
 
         self.program.compile_shader_from_string(
-            """
+            b"""
+            #version 440
             smooth in vec3 theColor;
             void main()
             {
@@ -74,12 +76,12 @@ class Mesh(GameObject):
         #self.vbuf.set_attribute(self.program.get_handle(), "color", 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0)
 
         # Specify the layout of the vertex data
-        position_attribute = glGetAttribLocation(self.program.get_handle(), "position")
+        position_attribute = glGetAttribLocation(self.program.get_handle(), b"position")
         if position_attribute > -1:
             glEnableVertexAttribArray(position_attribute)
             glVertexAttribPointer(position_attribute, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0)
 
-        color_attribute = glGetAttribLocation(self.program.get_handle(), "color")
+        color_attribute = glGetAttribLocation(self.program.get_handle(), b"color")
         if color_attribute > -1:
             glEnableVertexAttribArray(color_attribute)
             glVertexAttribPointer(color_attribute, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 2 * sizeof(GLfloat))
@@ -92,21 +94,21 @@ class Mesh(GameObject):
 
         self.program.bind()
 
-        view_location = glGetUniformLocation(self.program.get_handle(), "view")
+        view_location = glGetUniformLocation(self.program.get_handle(), b"view")
         if view_location > -1:
             v = self.camera.view
             v = v[:]
             v_ctype = (GLfloat * len(v))(*v)
             glUniformMatrix4fv(view_location, 1, GL_FALSE, v_ctype)
 
-        proj_location = glGetUniformLocation(self.program.get_handle(), "proj")
+        proj_location = glGetUniformLocation(self.program.get_handle(), b"proj")
         if proj_location > -1:
             p = self.camera.projection
             p = p[:]
             p_ctype = (GLfloat * len(p))(*p)
             glUniformMatrix4fv(proj_location, 1, GL_FALSE, p_ctype)
 
-        model_location = glGetUniformLocation(self.program.get_handle(), "model")
+        model_location = glGetUniformLocation(self.program.get_handle(), b"model")
         if model_location > -1:
             self.matrix = Matrix4.new_translate(self.position.x, self.position.y, self.position.z)
             if self.parent:

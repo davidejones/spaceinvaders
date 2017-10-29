@@ -6,7 +6,7 @@ from enemy import Enemy
 from swarm import Swarm
 from block import Block, BLOCK_SIZE
 from camera import Camera
-from euclid import Matrix4
+from euclid3 import Matrix4
 
 WIDTH = 800
 HEIGHT = 600

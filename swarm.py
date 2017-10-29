@@ -1,7 +1,7 @@
 from gameobject import GameObject
 from enemy import Enemy
 from block import BLOCK_SIZE
-from euclid import Vector2
+from euclid3 import Vector2
 import pyglet
 
 
