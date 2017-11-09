@@ -1,4 +1,5 @@
 from euclid3 import *
+from bounds import Bounds
 
 
 class GameObject:
@@ -7,9 +8,12 @@ class GameObject:
         self.children = []
         self.matrix = Matrix4().identity()
         self.position = Vector3(0.0, 0.0, 0.0)
+        self.bounds = Bounds(0, 0, 0, 0)
+        self.width = 0
+        self.height = 0
 
     def render(self):
-        pass
+        self.bounds.render()
 
     def update(self, dt):
         pass
@@ -37,9 +41,3 @@ class GameObject:
 
         for child_index, child in enumerate(self.children):
             child.compose()
-
-    def toRgb(self, RGBint):
-        Blue = RGBint & 255
-        Green = (RGBint >> 8) & 255
-        Red = (RGBint >> 16) & 255
-        return (1.0/255)*Red, (1.0/255)*Green, (1.0/255)*Blue

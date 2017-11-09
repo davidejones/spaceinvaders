@@ -1,5 +1,5 @@
 # spaceinvaders
-clone of space invaders game built with pyglet
+clone of space invaders game built with pyglet using the open gl interface
 
 All audio courtesey of
 http://www.classicgaming.cc/classics/spaceinvaders/sounds.php

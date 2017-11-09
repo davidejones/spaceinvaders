@@ -1,2 +1,3 @@
 euclid3==0.1
 pyglet==1.2.4
+mypy==0.540

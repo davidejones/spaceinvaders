@@ -1,6 +1,6 @@
 from gameobject import GameObject
 from enemy import Enemy
-from block import BLOCK_SIZE
+from config import *
 from euclid3 import Vector2
 import pyglet
 
@@ -11,14 +11,14 @@ class Swarm(GameObject):
         GameObject.__init__(self)
         self.enemies = []
         self.enemies.append([
-            Enemy(self),
-            Enemy(self),
-            Enemy(self),
-            Enemy(self),
-            Enemy(self),
-            Enemy(self),
-            Enemy(self),
-            Enemy(self),
+            Enemy(),
+            Enemy(),
+            Enemy(),
+            Enemy(),
+            Enemy(),
+            Enemy(),
+            Enemy(),
+            Enemy(),
         ])
         for row in self.enemies:
             for enemy in row:
@@ -40,6 +40,9 @@ class Swarm(GameObject):
 
     def update(self, dt):
         GameObject.update(self, dt)
+        for row in self.enemies:
+            for enemy in row:
+                enemy.update(dt)
 
     def move(self, dt):
         print('move')

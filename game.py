@@ -1,15 +1,12 @@
 import pyglet
 from pyglet.window import key, mouse
+pyglet.options['debug_gl'] = False
 from pyglet.gl import *
 from player import Player
 from enemy import Enemy
 from swarm import Swarm
-from block import Block, BLOCK_SIZE
+from config import *
 from camera import Camera
-from euclid3 import Matrix4
-
-WIDTH = 800
-HEIGHT = 600
 
 
 class MainGame:
@@ -20,13 +17,11 @@ class MainGame:
         #print(self.window.context.get_info().get_vendor())
         #print('OpenGL Version {}'.format(self.window.context.get_info().get_version()))
 
-        # start the background music
-        #music = pyglet.resource.media('music.mp3')
-        #music.play()
+        glViewport(0, 0, WIDTH, HEIGHT)
 
-        # manage keys
-        self.keys = key.KeyStateHandler()
-        self.window.push_handlers(self.keys)
+        # start the background music
+        #music = pyglet.resource.media('assets/music.mp3')
+        #music.play()
 
         # init objects
         self.camera = Camera(WIDTH, HEIGHT)
@@ -40,13 +35,14 @@ class MainGame:
         self.swarm = Swarm()
 
         # setup function calls
-        self.window.on_draw = self.on_draw
+        self.window.on_draw = self.render
         self.window.on_mouse_press = self.on_mouse_press
         self.window.on_mouse_motion = self.on_mouse_motion
-        pyglet.clock.schedule_interval(self.update, 1/60.0) # update at 60Hz
+        self.window.on_key_press = self.on_key_press
+        self.window.on_key_release = self.on_key_release
+        pyglet.clock.schedule_interval(self.update, 1/60.0)
 
-    def on_draw(self):
-        glViewport(0, 0, WIDTH, HEIGHT)
+    def render(self):
         glClearColor(0.114, 0.114, 0.114, 1.0) #1d1d1d
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.player.render()
@@ -65,3 +61,9 @@ class MainGame:
         # my x and y is from top left
         increment_x = x - self.player.position.x
         self.player.translate(increment_x, 0.0, 0.0)
+
+    def on_key_press(self, symbol, modifiers):
+        pass
+
+    def on_key_release(self, symbol, modifiers):
+        pass
