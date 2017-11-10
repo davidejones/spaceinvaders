@@ -57,13 +57,18 @@ class MainGame:
             self.player.fire()
 
     def on_mouse_motion(self, x, y, dx, dy):
-        # their x and y is from bottom left
-        # my x and y is from top left
-        increment_x = x - self.player.position.x
-        self.player.translate(increment_x, 0.0, 0.0)
+        self.player.move_mouse(x, y)
 
     def on_key_press(self, symbol, modifiers):
-        pass
+        if symbol == key.LEFT:
+            self.player.move_left()
+        elif symbol == key.RIGHT:
+            self.player.move_right()
+        elif symbol == key.SPACE:
+            self.player.fire()
 
     def on_key_release(self, symbol, modifiers):
-        pass
+        if symbol == key.LEFT:
+            self.player.move_end()
+        elif symbol == key.RIGHT:
+            self.player.move_end()
