@@ -3,7 +3,6 @@ from pyglet.window import key, mouse
 pyglet.options['debug_gl'] = False
 from pyglet.gl import *
 from player import Player
-from enemy import Enemy
 from swarm import Swarm
 from config import *
 from camera import Camera
@@ -13,9 +12,6 @@ class MainGame:
     def __init__(self):
         config = pyglet.gl.Config(major_version=2, minor_version=1)
         self.window = pyglet.window.Window(config=config, width=WIDTH, height=HEIGHT, resizable=False, vsync=True)
-        #print(self.window.context.get_info().get_renderer())
-        #print(self.window.context.get_info().get_vendor())
-        #print('OpenGL Version {}'.format(self.window.context.get_info().get_version()))
 
         glViewport(0, 0, WIDTH, HEIGHT)
 
@@ -25,13 +21,8 @@ class MainGame:
 
         # init objects
         self.camera = Camera(WIDTH, HEIGHT)
-
         self.player = Player()
         self.player.Translate(WIDTH/2 - (BLOCK_SIZE * 10)/2, HEIGHT - (BLOCK_SIZE * 10), 0.0)
-
-        #self.enemy = Enemy()
-        #self.enemy.Translate(WIDTH/2 - (BLOCK_SIZE * 10)/2, HEIGHT/2 - (BLOCK_SIZE * 10), 0.0)
-
         self.swarm = Swarm()
 
         # setup function calls

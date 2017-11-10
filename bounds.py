@@ -10,7 +10,7 @@ from config import *
 
 class Bounds:
 
-    def __init__(self, top, right, bottom, left):
+    def __init__(self, left, right, top, bottom):
         self.minX = left
         self.maxX = right
         self.minY = top
@@ -34,9 +34,9 @@ class Bounds:
         r, g, b = uint_to_rgb(0x00FF00)
         v = [
             0.0, 0.0, r, g, b,
-            0.0 + 40, 0.0, r, g, b,
-            0.0 + 40, 0.0 + 40, r, g, b,
-            0.0, 0.0 + 40, r, g, b,
+            right, 0.0, r, g, b,
+            right, bottom, r, g, b,
+            0.0, bottom, r, g, b,
         ]
         i = [
             0, 1, 2,

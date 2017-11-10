@@ -6,7 +6,8 @@ from config import *
 class Enemy(Mesh):
 
     def __init__(self, parent=None):
-        Mesh.__init__(self)
+        Mesh.__init__(self, BLOCK_SIZE * 10, BLOCK_SIZE * 10)
+        self.parent = parent
         self.shape = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -21,8 +22,6 @@ class Enemy(Mesh):
         ]
         v, i = shape_to_mesh(self.shape, 0x1EBDDD)
         self.set_data(vertices=v, indices=i)
-        self.width = BLOCK_SIZE * 10
-        self.height = BLOCK_SIZE * 10
 
     def move_left(self):
         self.matrix.translate(-10.0, 0, 0.0)
@@ -34,4 +33,4 @@ class Enemy(Mesh):
         print('firing')
 
     def update(self, dt):
-        self.bounds.set_bounds(self.position.x, self.position.x + 40, self.position.y, self.position.y + 40)
+        super().update(dt)

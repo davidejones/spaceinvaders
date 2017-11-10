@@ -9,7 +9,7 @@ from euclid3 import *
 
 class Mesh(GameObject):
 
-    def __init__(self):
+    def __init__(self, width, height):
         self.program = Program()
         self.vao = GLuint(0)
         self.vbuf = None
@@ -20,7 +20,7 @@ class Mesh(GameObject):
         self.uvs = []
         # we should really be getting the camera not creating a new instance..
         self.camera = Camera(800, 600)
-        GameObject.__init__(self)
+        GameObject.__init__(self, width, height)
 
     def set_data(self, *args, **kwargs):
         self.vertices = kwargs.get('vertices', [])
@@ -129,3 +129,6 @@ class Mesh(GameObject):
             pass #gldrawarray?
         # stop the vao
         glBindVertexArray(0)
+
+    def update(self, dt):
+        super().update(dt)
