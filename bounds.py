@@ -30,7 +30,7 @@ class Bounds:
         self.indices = []
         self.uvs = []
         # we should really be getting the camera not creating a new instance..
-        self.camera = Camera(800, 600)
+        self.camera = Camera(WIDTH, HEIGHT)
         r, g, b = uint_to_rgb(0x00FF00)
         v = [
             0.0, 0.0, r, g, b,

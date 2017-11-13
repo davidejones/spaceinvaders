@@ -1,5 +1,5 @@
 import pyglet
-from pyglet.window import key, mouse
+from pyglet.window import key, mouse, FPSDisplay
 pyglet.options['debug_gl'] = False
 from pyglet.gl import *
 from player import Player
@@ -12,7 +12,6 @@ class MainGame:
     def __init__(self):
         config = pyglet.gl.Config(major_version=2, minor_version=1)
         self.window = pyglet.window.Window(config=config, width=WIDTH, height=HEIGHT, resizable=False, vsync=True)
-
         glViewport(0, 0, WIDTH, HEIGHT)
 
         # start the background music

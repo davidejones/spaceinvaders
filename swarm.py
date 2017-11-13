@@ -8,10 +8,10 @@ import pyglet
 class Swarm(GameObject):
 
     def __init__(self):
-        self.buffer = 20
+        self.buffer = SWARM_SPACE
         self.enemy_width = (BLOCK_SIZE * 10) + self.buffer
         self.enemy_height = (BLOCK_SIZE * 10) + self.buffer
-        GameObject.__init__(self, self.enemy_width * 8, self.enemy_height * 3)
+        GameObject.__init__(self, (self.enemy_width * 11) - self.buffer, (self.enemy_height * 5) - self.buffer)
         self.enemies = [
             [
                 Enemy(parent=self),
@@ -22,6 +22,22 @@ class Swarm(GameObject):
                 Enemy(parent=self),
                 Enemy(parent=self),
                 Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+            ],
+            [
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
             ],
             [
                 Enemy(parent=self),
@@ -32,8 +48,27 @@ class Swarm(GameObject):
                 Enemy(parent=self),
                 Enemy(parent=self),
                 Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
             ],
             [
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
+            ],
+            [
+                Enemy(parent=self),
+                Enemy(parent=self),
+                Enemy(parent=self),
                 Enemy(parent=self),
                 Enemy(parent=self),
                 Enemy(parent=self),
@@ -67,15 +102,15 @@ class Swarm(GameObject):
                 enemy.update(dt)
 
     def move(self, dt):
-        if self.position.x <= 0:
+        if self.bounds.position.x <= 0:
             # if we reach left side move down and then start moving right
             self.direction.x = 1
             self.direction.y = 1
-        elif self.position.x >= self.enemy_width * 8:
+        elif self.bounds.position.x + self.width >= WIDTH:
             # if we reach right side move down and then start moving left
             self.direction.x = -1
             self.direction.y = 1
         else:
             self.direction.y = 0
         # make the x movement
-        self.translate(self.enemy_width * self.direction.x, self.enemy_height * self.direction.y, 0.0)
+        self.translate(10 * self.direction.x, 0.0, 0.0)

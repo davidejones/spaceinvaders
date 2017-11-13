@@ -5,6 +5,7 @@ from camera import Camera
 from pyglet.gl import *
 from ctypes import *
 from euclid3 import *
+from config import *
 
 
 class Mesh(GameObject):
@@ -19,7 +20,7 @@ class Mesh(GameObject):
         self.indices = []
         self.uvs = []
         # we should really be getting the camera not creating a new instance..
-        self.camera = Camera(800, 600)
+        self.camera = Camera(WIDTH, HEIGHT)
         GameObject.__init__(self, width, height)
 
     def set_data(self, *args, **kwargs):
