@@ -102,15 +102,27 @@ class Swarm(GameObject):
                 enemy.update(dt)
 
     def move(self, dt):
-        if self.bounds.position.x <= 0:
-            # if we reach left side move down and then start moving right
-            self.direction.x = 1
-            self.direction.y = 1
-        elif self.bounds.position.x + self.width >= WIDTH:
-            # if we reach right side move down and then start moving left
-            self.direction.x = -1
-            self.direction.y = 1
-        else:
+        move_amount = (10 * self.direction.x)
+
+        if self.direction.y == 1:
+            self.translate(0.0, 10, 0.0)
             self.direction.y = 0
-        # make the x movement
-        self.translate(10 * self.direction.x, 0.0, 0.0)
+            if self.position.x <= 0:
+                self.direction.x = 1
+            else:
+                self.direction.x = -1
+
+        if self.direction.x == 1:
+            if self.position.x + self.width + move_amount >= WIDTH:
+                self.Translate(WIDTH - self.width, self.position.y, self.position.z)
+                self.direction.y = 1
+                self.direction.x = 0
+            else:
+                self.translate(move_amount, 0.0, 0.0)
+        elif self.direction.x == -1:
+            if self.position.x + move_amount <= 0:
+                self.Translate(0, self.position.y, self.position.z)
+                self.direction.y = 1
+                self.direction.x = 0
+            else:
+                self.translate(move_amount, 0.0, 0.0)
