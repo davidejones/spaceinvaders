@@ -50,13 +50,6 @@ class Player(Mesh):
             else:
                 self.translate(increment_x, 0.0, 0.0)
 
-    def fire(self):
-        sound = pyglet.resource.media('assets/shoot.wav', streaming=False)
-        sound.play()
-        # spawn projectile at player position
-        # increase y
-        # when offscreen return to pool?
-
     def update(self, dt):
         super().update(dt)
         if self.direction.x == 1:

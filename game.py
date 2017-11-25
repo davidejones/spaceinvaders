@@ -6,6 +6,7 @@ from player import Player
 from swarm import Swarm
 from config import *
 from camera import Camera
+from projectile import Projectile
 
 
 class MainGame:
@@ -23,6 +24,14 @@ class MainGame:
         self.player = Player()
         self.player.Translate(WIDTH/2 - (BLOCK_SIZE * 10)/2, HEIGHT - (BLOCK_SIZE * 10), 0.0)
         self.swarm = Swarm()
+        self.player_projectile_pool = [
+                Projectile(),
+                Projectile(),
+                Projectile(),
+                Projectile(),
+                Projectile(),
+                Projectile()
+        ]
 
         # setup function calls
         self.window.on_draw = self.render
@@ -37,14 +46,28 @@ class MainGame:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.player.render()
         self.swarm.render()
+        for p in self.player_projectile_pool:
+            if p.in_use:
+                p.render()
 
     def update(self, dt):
         self.player.update(dt)
         self.swarm.update(dt)
+        for p in self.player_projectile_pool:
+            p.update(dt)
+
+    def fire(self):
+        sound = pyglet.resource.media('assets/shoot.wav', streaming=False)
+        sound.play()
+        usable = list(filter(lambda x: not x.in_use, self.player_projectile_pool))
+        if len(usable):
+            p = usable[0]
+            p.Translate((self.player.position.x + self.player.width * 0.5) - (p.width * 0.5), self.player.position.y, 0)
+            p.in_use = True
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == mouse.LEFT:
-            self.player.fire()
+            self.fire()
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.player.move_mouse(x, y)
@@ -55,7 +78,7 @@ class MainGame:
         elif symbol == key.RIGHT:
             self.player.move_right()
         elif symbol == key.SPACE:
-            self.player.fire()
+            self.fire()
 
     def on_key_release(self, symbol, modifiers):
         if symbol == key.LEFT:
