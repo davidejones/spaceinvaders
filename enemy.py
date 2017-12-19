@@ -5,22 +5,11 @@ from config import *
 
 class Enemy(Mesh):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, shape=None, color=0x1EBDDD):
         Mesh.__init__(self, BLOCK_SIZE * 10, BLOCK_SIZE * 10)
         self.parent = parent
-        self.shape = [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-            [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
-            [0, 1, 0, 1, 1, 1, 1, 0, 1, 0],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        ]
-        v, i = shape_to_mesh(self.shape, 0x1EBDDD)
+        self.shape = shape
+        v, i = shape_to_mesh(self.shape, color)
         self.set_data(vertices=v, indices=i)
 
     def move_left(self):

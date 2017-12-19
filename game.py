@@ -30,6 +30,11 @@ class MainGame:
                 Projectile(),
                 Projectile(),
                 Projectile(),
+                Projectile(),
+                Projectile(),
+                Projectile(),
+                Projectile(),
+                Projectile(),
                 Projectile()
         ]
 

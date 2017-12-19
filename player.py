@@ -21,7 +21,7 @@ class Player(Mesh):
             [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
-        v, i = shape_to_mesh(self.shape, 0xFF0000)
+        v, i = shape_to_mesh(self.shape, 0xFFFFFF)
         self.set_data(vertices=v, indices=i)
         self.direction = Vector2(0, 0)
         self.move_amount = 10.0
