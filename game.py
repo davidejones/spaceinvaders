@@ -60,6 +60,11 @@ class MainGame:
         self.swarm.update(dt)
         for p in self.player_projectile_pool:
             p.update(dt)
+            if p.in_use:
+                if self.swarm.check_collide(p.bounds):
+                    sound = pyglet.resource.media('assets/invaderkilled.wav', streaming=False)
+                    sound.play()
+                    p.in_use = False
 
     def fire(self):
         sound = pyglet.resource.media('assets/shoot.wav', streaming=False)

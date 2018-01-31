@@ -139,3 +139,15 @@ class Swarm(GameObject):
                 self.direction.x = 0
             else:
                 self.translate(move_amount, 0.0, 0.0)
+
+    def check_collide(self, bounds):
+        item = []
+        collided = False
+        for row_index, row in enumerate(self.enemies):
+            for col_index, enemy in enumerate(row):
+                if enemy.bounds.check_intersect(bounds):
+                    item = [row_index, col_index]
+        if item:
+            del self.enemies[item[0]][item[1]]
+            collided = True
+        return collided

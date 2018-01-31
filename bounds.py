@@ -47,6 +47,10 @@ class Bounds:
     def set_bounds(self, left, right, top, bottom):
         self.position.x = left
         self.position.y = top
+        self.minX = left
+        self.maxX = right
+        self.minY = top
+        self.maxY = bottom
         self.matrix = Matrix4.new_translate(self.position.x, self.position.y, self.position.z)
 
     def check_intersect(self, bounds):
