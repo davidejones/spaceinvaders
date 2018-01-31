@@ -11,7 +11,7 @@ from projectile import Projectile
 
 class MainGame:
     def __init__(self):
-        config = pyglet.gl.Config(major_version=2, minor_version=1)
+        config = pyglet.gl.Config(major_version=2, minor_version=1, forward_compatible=True)
         self.window = pyglet.window.Window(config=config, width=WIDTH, height=HEIGHT, resizable=False, vsync=True)
         glViewport(0, 0, WIDTH, HEIGHT)
 

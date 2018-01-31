@@ -72,10 +72,11 @@ class Bounds:
         self.uvs = kwargs.get('uvs', [])
         self.colors = kwargs.get('colors', [])
 
-        # create a vao
-        glGenVertexArrays(1, self.vao)
-        # use it
-        glBindVertexArray(self.vao)
+        if gl_info.have_extension('GL_ARB_vertex_array_object'):
+            # create a vao
+            glGenVertexArrays(1, self.vao)
+            # use it
+            glBindVertexArray(self.vao)
         # create a vertexbuffer
         if self.vertices:
             self.vbuf = VertexBuffer(self.vertices)
@@ -87,13 +88,11 @@ class Bounds:
 
         self.program.compile_shader_from_string(
             b"""
-            #version 440
-            layout (location = 0) in vec2 position;
-            layout (location = 1) in vec3 color;
-            uniform mat4 proj;
-            uniform mat4 view;
-            uniform mat4 model;
-            smooth out vec3 theColor;
+            #version 120
+            attribute vec2 position;
+            attribute vec3 color;
+            uniform mat4 proj, view, model;
+            varying vec3 theColor;
 
             void main()
             {
@@ -104,8 +103,8 @@ class Bounds:
 
         self.program.compile_shader_from_string(
             b"""
-            #version 440
-            smooth in vec3 theColor;
+            #version 120
+            varying vec3 theColor;
             void main()
             {
                 gl_FragColor = vec4(theColor, 1.0);
@@ -129,8 +128,9 @@ class Bounds:
             glEnableVertexAttribArray(color_attribute)
             glVertexAttribPointer(color_attribute, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 2 * sizeof(GLfloat))
 
-        # stop the vao
-        glBindVertexArray(0)
+        if gl_info.have_extension('GL_ARB_vertex_array_object'):
+            # stop the vao
+            glBindVertexArray(0)
 
     def render(self):
         self.program.bind()
@@ -161,12 +161,15 @@ class Bounds:
             m_ctype = (GLfloat * len(m))(*m)
             glUniformMatrix4fv(model_location, 1, GL_FALSE, m_ctype)
 
-        # bind vao for use
-        glBindVertexArray(self.vao)
+        if gl_info.have_extension('GL_ARB_vertex_array_object'):
+            # bind vao for use
+            glBindVertexArray(self.vao)
         # Draw a rectangle from the 2 triangles using 6 indices
         if self.indices:
             glDrawElements(GL_LINE_STRIP, len(self.indices), GL_UNSIGNED_INT, 0)
         elif self.vertices:
             pass #gldrawarray?
-        # stop the vao
-        glBindVertexArray(0)
+
+        if gl_info.have_extension('GL_ARB_vertex_array_object'):
+            # stop the vao
+            glBindVertexArray(0)
