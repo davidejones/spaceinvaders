@@ -1,6 +1,8 @@
+import sys
 import pyglet
 pyglet.options['debug_gl'] = True
-pyglet.options['shadow_window'] = False # we need this for mac os to be able to grab opengl 3.2
+if sys.platform == 'darwin':
+    pyglet.options['shadow_window'] = False # we need this for mac os to be able to grab opengl 3.2
 from pyglet.window import key, mouse, FPSDisplay
 from pyglet.gl import *
 from player import Player
