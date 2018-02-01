@@ -1,6 +1,7 @@
 import pyglet
+pyglet.options['debug_gl'] = True
+pyglet.options['shadow_window'] = False # we need this for mac os to be able to grab opengl 3.2
 from pyglet.window import key, mouse, FPSDisplay
-pyglet.options['debug_gl'] = False
 from pyglet.gl import *
 from player import Player
 from swarm import Swarm
@@ -11,9 +12,12 @@ from projectile import Projectile
 
 class MainGame:
     def __init__(self):
-        config = pyglet.gl.Config(major_version=2, minor_version=1, forward_compatible=True)
+        config = pyglet.gl.Config(double_buffer=True, major_version=3, minor_version=2, forward_compatible=False)
         self.window = pyglet.window.Window(config=config, width=WIDTH, height=HEIGHT, resizable=False, vsync=True)
         glViewport(0, 0, WIDTH, HEIGHT)
+
+        print('OpenGL version:', self.window.context.get_info().get_version())
+        print('OpenGL 3.2 support:', self.window.context.get_info().have_version(3, 2))
 
         # start the background music
         #music = pyglet.resource.media('assets/music.mp3')
@@ -44,6 +48,7 @@ class MainGame:
         self.window.on_mouse_motion = self.on_mouse_motion
         self.window.on_key_press = self.on_key_press
         self.window.on_key_release = self.on_key_release
+        self.window.on_resize = self.on_resize
         pyglet.clock.schedule_interval(self.update, 1/60.0)
 
     def render(self):
@@ -95,3 +100,6 @@ class MainGame:
             self.player.move_end()
         elif symbol == key.RIGHT:
             self.player.move_end()
+
+    def on_resize(self, width, height):
+        pass
