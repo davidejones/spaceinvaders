@@ -136,41 +136,42 @@ class Bounds:
         glBindVertexArray(0)
 
     def render(self):
-        self.program.bind()
-
-        view_location = glGetUniformLocation(self.program.get_handle(), b"view")
-        if view_location > -1:
-            v = self.camera.view
-            v = v[:]
-            v_ctype = (GLfloat * len(v))(*v)
-            glUniformMatrix4fv(view_location, 1, GL_FALSE, v_ctype)
-
-        proj_location = glGetUniformLocation(self.program.get_handle(), b"proj")
-        if proj_location > -1:
-            p = self.camera.projection
-            p = p[:]
-            p_ctype = (GLfloat * len(p))(*p)
-            glUniformMatrix4fv(proj_location, 1, GL_FALSE, p_ctype)
-
-        model_location = glGetUniformLocation(self.program.get_handle(), b"model")
-        if model_location > -1:
-            self.matrix = Matrix4.new_translate(self.position.x, self.position.y, self.position.z)
-            if self.parent:
-                m = Matrix4().identity()
-                m = self.parent.matrix * self.matrix
-                m = m[:]
-            else:
-                m = self.matrix[:]
-            m_ctype = (GLfloat * len(m))(*m)
-            glUniformMatrix4fv(model_location, 1, GL_FALSE, m_ctype)
-
-        # bind vao for use
-        glBindVertexArray(self.vao)
-        # Draw a rectangle from the 2 triangles using 6 indices
-        if self.indices:
-            glDrawElements(GL_LINE_STRIP, len(self.indices), GL_UNSIGNED_INT, 0)
-        elif self.vertices:
-            pass #gldrawarray?
-
-        # stop the vao
-        glBindVertexArray(0)
+        pass
+        # self.program.bind()
+        #
+        # view_location = glGetUniformLocation(self.program.get_handle(), b"view")
+        # if view_location > -1:
+        #     v = self.camera.view
+        #     v = v[:]
+        #     v_ctype = (GLfloat * len(v))(*v)
+        #     glUniformMatrix4fv(view_location, 1, GL_FALSE, v_ctype)
+        #
+        # proj_location = glGetUniformLocation(self.program.get_handle(), b"proj")
+        # if proj_location > -1:
+        #     p = self.camera.projection
+        #     p = p[:]
+        #     p_ctype = (GLfloat * len(p))(*p)
+        #     glUniformMatrix4fv(proj_location, 1, GL_FALSE, p_ctype)
+        #
+        # model_location = glGetUniformLocation(self.program.get_handle(), b"model")
+        # if model_location > -1:
+        #     self.matrix = Matrix4.new_translate(self.position.x, self.position.y, self.position.z)
+        #     if self.parent:
+        #         m = Matrix4().identity()
+        #         m = self.parent.matrix * self.matrix
+        #         m = m[:]
+        #     else:
+        #         m = self.matrix[:]
+        #     m_ctype = (GLfloat * len(m))(*m)
+        #     glUniformMatrix4fv(model_location, 1, GL_FALSE, m_ctype)
+        #
+        # # bind vao for use
+        # glBindVertexArray(self.vao)
+        # # Draw a rectangle from the 2 triangles using 6 indices
+        # if self.indices:
+        #     glDrawElements(GL_LINE_STRIP, len(self.indices), GL_UNSIGNED_INT, 0)
+        # elif self.vertices:
+        #     pass #gldrawarray?
+        #
+        # # stop the vao
+        # glBindVertexArray(0)

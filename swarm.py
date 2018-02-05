@@ -3,6 +3,7 @@ from enemy import Enemy
 from config import *
 from euclid3 import Vector2
 import pyglet
+import time
 
 
 class Swarm(GameObject):
@@ -97,10 +98,16 @@ class Swarm(GameObject):
                 self.children.append(enemy)
 
         self.direction = Vector2(1, 0)
+        self.interval = 4.5
         for row_index, row in enumerate(self.enemies):
             for col_index, enemy in enumerate(row):
                 enemy.Translate(col_index * self.enemy_width, row_index * self.enemy_height, 0.0)
-        pyglet.clock.schedule_interval(self.move, 1)
+        #pyglet.clock.schedule_once(self.move, self.interval)
+        self.time_elapsed_since_last_action = 0
+
+    def faster(self):
+        if self.interval > 0.1:
+            self.interval -= 0.2
 
     def render(self):
         super().render()
@@ -113,8 +120,12 @@ class Swarm(GameObject):
         for row in self.enemies:
             for enemy in row:
                 enemy.update(dt)
+        self.time_elapsed_since_last_action += pyglet.clock.tick()
+        if self.time_elapsed_since_last_action > self.interval / 1000:
+            self.move()
+            self.time_elapsed_since_last_action = 0
 
-    def move(self, dt):
+    def move(self, dt=0):
         move_amount = (10 * self.direction.x)
 
         if self.direction.y == 1:
@@ -130,6 +141,7 @@ class Swarm(GameObject):
                 self.Translate(WIDTH - self.width, self.position.y, self.position.z)
                 self.direction.y = 1
                 self.direction.x = 0
+                self.faster()
             else:
                 self.translate(move_amount, 0.0, 0.0)
         elif self.direction.x == -1:
@@ -137,8 +149,10 @@ class Swarm(GameObject):
                 self.Translate(0, self.position.y, self.position.z)
                 self.direction.y = 1
                 self.direction.x = 0
+                self.faster()
             else:
                 self.translate(move_amount, 0.0, 0.0)
+        #pyglet.clock.schedule_once(self.move, self.interval)
 
     def check_collide(self, bounds):
         item = []
