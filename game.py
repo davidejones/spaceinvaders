@@ -74,10 +74,10 @@ class MainGame:
                     p.in_use = False
 
     def fire(self):
-        sound = pyglet.resource.media('assets/shoot.wav', streaming=False)
-        sound.play()
         usable = list(filter(lambda x: not x.in_use, self.player_projectile_pool))
         if len(usable):
+            sound = pyglet.resource.media('assets/shoot.wav', streaming=False)
+            sound.play()
             p = usable[0]
             p.Translate((self.player.position.x + self.player.width * 0.5) - (p.width * 0.5), self.player.position.y, 0)
             p.in_use = True

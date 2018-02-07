@@ -3,6 +3,7 @@ from enemy import Enemy
 from config import *
 from euclid3 import Vector2
 import pyglet
+from projectile import Projectile
 import time
 
 
@@ -102,8 +103,16 @@ class Swarm(GameObject):
         for row_index, row in enumerate(self.enemies):
             for col_index, enemy in enumerate(row):
                 enemy.Translate(col_index * self.enemy_width, row_index * self.enemy_height, 0.0)
-        #pyglet.clock.schedule_once(self.move, self.interval)
+        pyglet.clock.schedule_interval(self.fire, 0.5)
         self.time_elapsed_since_last_action = 0
+        self.swarm_projectile_pool = [
+            Projectile(Vector2(0, 1)),
+            Projectile(Vector2(0, 1)),
+            Projectile(Vector2(0, 1)),
+            Projectile(Vector2(0, 1)),
+            Projectile(Vector2(0, 1)),
+            Projectile(Vector2(0, 1)),
+        ]
 
     def faster(self):
         if self.interval > 0.1:
@@ -114,6 +123,9 @@ class Swarm(GameObject):
         for row in self.enemies:
             for enemy in row:
                 enemy.render()
+        for p in self.swarm_projectile_pool:
+            if p.in_use:
+                p.render()
 
     def update(self, dt):
         super().update(dt)
@@ -124,6 +136,22 @@ class Swarm(GameObject):
         if self.time_elapsed_since_last_action > self.interval / 1000:
             self.move()
             self.time_elapsed_since_last_action = 0
+        for p in self.swarm_projectile_pool:
+            p.update(dt)
+            if p.in_use:
+                # if offscreen or collide then destroy
+                if p.bounds.minY >= HEIGHT:
+                    p.in_use = False
+
+    def fire(self, dt):
+        # pick a random space invader to fire
+        usable = list(filter(lambda x: not x.in_use, self.swarm_projectile_pool))
+        if len(usable):
+            #sound = pyglet.resource.media('assets/shoot.wav', streaming=False)
+            #sound.play()
+            p = usable[0]
+            p.Translate((self.position.x + self.width * 0.5) - (p.width * 0.5), self.position.y, 0)
+            p.in_use = True
 
     def move(self, dt=0):
         move_amount = (10 * self.direction.x)
