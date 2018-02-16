@@ -61,6 +61,9 @@ class MainGame:
         for p in self.player_projectile_pool:
             if p.in_use:
                 p.render()
+        for p in self.swarm.swarm_projectile_pool:
+            if p.in_use:
+                p.render()
 
     def update(self, dt):
         self.player.update(dt)
@@ -72,6 +75,19 @@ class MainGame:
                     sound = pyglet.resource.media('assets/invaderkilled.wav', streaming=False)
                     sound.play()
                     p.in_use = False
+        for p in self.swarm.swarm_projectile_pool:
+            p.update(dt)
+            if p.in_use:
+                if p.bounds.minY >= HEIGHT:
+                    p.in_use = False
+                elif self.player.bounds.check_intersect(p.bounds):
+                    sound = pyglet.resource.media('assets/explosion.wav', streaming=False)
+                    sound.play()
+                    p.in_use = False
+                    self.game_over()
+
+    def game_over(self):
+        pass
 
     def fire(self):
         usable = list(filter(lambda x: not x.in_use, self.player_projectile_pool))

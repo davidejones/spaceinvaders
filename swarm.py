@@ -5,6 +5,7 @@ from euclid3 import Vector2
 import pyglet
 from projectile import Projectile
 import time
+from random import randrange
 
 
 class Swarm(GameObject):
@@ -122,36 +123,44 @@ class Swarm(GameObject):
         super().render()
         for row in self.enemies:
             for enemy in row:
-                enemy.render()
-        for p in self.swarm_projectile_pool:
-            if p.in_use:
-                p.render()
+                if enemy:
+                    enemy.render()
 
     def update(self, dt):
         super().update(dt)
         for row in self.enemies:
             for enemy in row:
-                enemy.update(dt)
+                if enemy:
+                    enemy.update(dt)
         self.time_elapsed_since_last_action += pyglet.clock.tick()
         if self.time_elapsed_since_last_action > self.interval / 1000:
             self.move()
             self.time_elapsed_since_last_action = 0
-        for p in self.swarm_projectile_pool:
-            p.update(dt)
-            if p.in_use:
-                # if offscreen or collide then destroy
-                if p.bounds.minY >= HEIGHT:
-                    p.in_use = False
+
+    def get_firing_enemy(self):
+        transpose = list(map(list, zip(*self.enemies)))
+        last_of_each_col = []
+        for row in transpose:
+            for enemy in reversed(row):
+                if enemy:
+                    last_of_each_col.append(enemy)
+                    break
+        col = randrange(len(last_of_each_col))
+        if last_of_each_col[col]:
+            return last_of_each_col[col]
 
     def fire(self, dt):
         # pick a random space invader to fire
-        usable = list(filter(lambda x: not x.in_use, self.swarm_projectile_pool))
-        if len(usable):
-            #sound = pyglet.resource.media('assets/shoot.wav', streaming=False)
-            #sound.play()
-            p = usable[0]
-            p.Translate((self.position.x + self.width * 0.5) - (p.width * 0.5), self.position.y, 0)
-            p.in_use = True
+        enemy = self.get_firing_enemy()
+        if enemy:
+            usable = list(filter(lambda x: not x.in_use, self.swarm_projectile_pool))
+            if len(usable):
+                #sound = pyglet.resource.media('assets/shoot.wav', streaming=False)
+                #sound.play()
+                p = usable[0]
+                #p.Translate((self.position.x + self.width * 0.5) - (p.width * 0.5), self.position.y, 0)
+                p.Translate((self.position.x + enemy.position.x + enemy.width * 0.5) - (p.width * 0.5), self.position.y + enemy.position.y + enemy.height + self.buffer, 0)
+                p.in_use = True
 
     def move(self, dt=0):
         move_amount = (10 * self.direction.x)
@@ -187,9 +196,11 @@ class Swarm(GameObject):
         collided = False
         for row_index, row in enumerate(self.enemies):
             for col_index, enemy in enumerate(row):
-                if enemy.bounds.check_intersect(bounds):
-                    item = [row_index, col_index]
+                if enemy:
+                    if enemy.bounds.check_intersect(bounds):
+                        item = [row_index, col_index]
         if item:
-            del self.enemies[item[0]][item[1]]
+            #del self.enemies[item[0]][item[1]]
+            self.enemies[item[0]][item[1]] = None
             collided = True
         return collided
